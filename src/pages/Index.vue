@@ -8,7 +8,9 @@
           @reset="onReset"
           @submit="onSubmit"
         >
-          <q-select outlined v-model="arquet" :options="arqOptions" label="Arquétipo" />
+          <q-select outlined v-model="arquet"
+            :options="arqOptions"
+            label="Arquétipo" />
           <q-select outlined v-model="context" :options="contOptions" label="Contexto" />
           <q-select outlined v-model="alinh" :options="alinOptions" label="Alinhamento Moral" />
           <div>
@@ -26,30 +28,48 @@
 export default {
   name: 'PageIndex',
   data() {
+    const arqs = {
+      'The Innocent': 'innocent',
+      'The Everyman': 'everyman',
+      'The Hero': 'hero',
+      'The Caregiver': 'caregiver',
+      'The Explorer': 'explorer',
+      'The Rebel': 'rebel',
+      'The Lover': 'lover',
+      'The Creator/Artist': 'creator',
+      'The Jester': 'jester',
+      'The Sage': 'sage',
+      'The Magician': 'magician',
+      'The Ruler': 'ruler',
+    };
+    const contexts = {
+      Medieval: 'medieval',
+      Cyberpunk: 'cyberpunk',
+      Recifense: 'recifense',
+    };
+    const aligns = {
+      'Lawful good': 'LG',
+      'Neutral good': 'NG',
+      'Chaotic good': 'CG',
+      'Lawful neutral': 'LN',
+      'True neutral': 'TN',
+      'Chaotic neutral': 'CN',
+      'Lawful evil': 'LE',
+      'Neutral evil': 'NE',
+      'Chaotic evil': 'CE',
+    };
     return {
       displayOcup: null,
       displayMotiv: null,
       arquet: null,
       context: null,
       alinh: null,
-      arqOptions: [
-        'The Innocent', 'The Everyman', 'The Hero', 'The Caregiver', 'The Explorer', 'The Rebel', 'The Lover', 'The Creator/Artist', 'The Jester', 'The Sage', 'The Magician', 'The Ruler',
-      ],
-      contOptions: [
-        'Medieval', 'Cyberpunk', 'Recifense',
-      ],
-      alinOptions: [
-        'Lawful good', 'Neutral good', 'Chaotic good', 'Lawful neutral', 'True neutral', 'Chaotic neutral', 'Lawful evil', 'Neutral evil', 'Chaotic evil',
-      ],
-      medieval: [
-        'Ator', 'Ferreiro', 'Taverneiro', 'Carpinteiro', 'Construtor', 'Sapateiro', 'Cozinheiro', 'Carteiro', 'Mestre da Guilda', 'Mago', 'Escultora', 'Açougueira', 'Lorde', 'Professora', 'Advogada', 'Pirata', 'Necromante', 'Açougueira', 'Fazendeira', 'Cavaleiro', 'Bruxo',
-      ],
-      cyberpunk: [
-        'Atriz', 'Médico', 'Médica', 'Prefeito', 'Padre', 'Coletor de Impostos', 'Músico', 'Professor', 'Prefeito', 'Mendigo', 'Caçador', 'Caçadora', 'Ladra', 'Torturadora', 'Banqueiro', 'Mercador', 'Mercadora', 'Soldado', 'Programadora', 'Youtuber', 'Policial',
-      ],
-      recifense: [
-        'Vendedor Ambulante', 'Veterinário', 'Estudante', 'Programador', 'Entregador de Pizza', 'Investidor de Criptomoeda', 'Chaveiro', 'Vendedora Ambulante', 'Padeiro', 'Bibliotecário', 'Pintor', 'Pintora', 'Gari', 'Investidora de Criptomoeda', 'Doméstica',
-      ],
+      arqOptions: Object.keys(arqs),
+      arqs,
+      contOptions: Object.keys(contexts),
+      contexts,
+      alinOptions: Object.keys(aligns),
+      aligns,
     };
   },
   methods: {
@@ -61,91 +81,76 @@ export default {
       this.displayMotiv = null;
     },
     onSubmit() {
-      let rand;
-      if (this.context === 'Medieval') {
-        rand = Math.floor(Math.random() * this.medieval.length);
-        this.displayOcup = this.medieval[rand];
-      } else if (this.context === 'Cyberpunk') {
-        rand = Math.floor(Math.random() * this.cyberpunk.length);
-        this.displayOcup = this.cyberpunk[rand];
-      } else {
-        rand = Math.floor(Math.random() * this.recifense.length);
-        this.displayOcup = this.recifense[rand];
-      }
+      const ocup = {
+        medieval: [
+          'Ator', 'Ferreiro', 'Taverneiro', 'Carpinteiro', 'Construtor', 'Sapateiro', 'Cozinheiro', 'Carteiro', 'Mestre da Guilda', 'Mago', 'Escultora', 'Açougueira', 'Lorde', 'Professora', 'Advogada', 'Pirata', 'Necromante', 'Açougueira', 'Fazendeira', 'Cavaleiro', 'Bruxo',
+        ],
+        cyberpunk: [
+          'Atriz', 'Médico', 'Médica', 'Prefeito', 'Padre', 'Coletor de Impostos', 'Músico', 'Professor', 'Prefeito', 'Mendigo', 'Caçador', 'Caçadora', 'Ladra', 'Torturadora', 'Banqueiro', 'Mercador', 'Mercadora', 'Soldado', 'Programadora', 'Youtuber', 'Policial',
+        ],
+        recifense: [
+          'Vendedor Ambulante', 'Veterinário', 'Estudante', 'Programador', 'Entregador de Pizza', 'Investidor de Criptomoeda', 'Chaveiro', 'Vendedora Ambulante', 'Padeiro', 'Bibliotecário', 'Pintor', 'Pintora', 'Gari', 'Investidora de Criptomoeda', 'Doméstica',
+        ],
+      };
 
-      if (this.alinh === 'Lawful good') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Passar um bom tempo com as pessoas que gosta e conseguir descansar o dia todo. Combater os monstros e as pessoas ruins do mundo.';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = 'Ajudar pessoas que não tem condições de ter uma vida adequada';
-        } else {
-          this.displayMotiv = 'Escutar sua familia e amigos fofoqueiros e realmente não espalhar pra ninguém. Ceder o lugar no ônibus para os mais velhos, gestates ou PCD';
-        }
-      } else if (this.alinh === 'Neutral good') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = '';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = '';
-        } else {
-          this.displayMotiv = 'Sair na noite pra acompanhar os amigos e comer no Gildo lanches de madrugada. Só quer ficar de boa e tirar ferias pra ir pra praia.';
-        }
-      } else if (this.alinh === 'Chaotic good') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Sempre atrás de dinheiro (normalmente jogando em tavernas) para dar a caridade. Faz venda de artefatos / comida / afins, cobrando muito caro de senhores de terra e pouco de camponeses';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = 'Fazer de tudo para seus amigos, até mesmo vender uma perna (de outra pessoa).';
-        } else {
-          this.displayMotiv = 'Fazer culto no metro / ônibus, no horário de volta, quando todo mundo ta tentando dormir. Gritar que tem tubarão na agua toda vez que vê alguém indo pro fundo na praia de BV';
-        }
-      } else if (this.alinh === 'Lawful neutral') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Tentar fazer todos pagarem o que fizeram na mesma moeda (olho por olho, dente por dente)';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = '';
-        } else {
-          this.displayMotiv = 'Dirigir dando a seta (essa pessoa realmente existe em recife?)';
-        }
-      } else if (this.alinh === 'True neutral') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Sentir a adrenalina de caçar presas, seja animais, monstros ou outra coisa.';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = 'Ficar de boa no mundo virtual e esquecer que tem um corpo fisico.';
-        } else {
-          this.displayMotiv = 'Terminar sua graduação / mestrado / doutorado dps de incontáveis anos de curso, depois de ter desistido diversas vezes.';
-        }
-      } else if (this.alinh === 'Chaotic neutral') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Fazer confusão e sempre culpar outra pessoa.';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = '';
-        } else {
-          this.displayMotiv = 'Gritar “falou da mãe, vai deixar?”, toda vez que vê uma discussão na rua.';
-        }
-      } else if (this.alinh === 'Lawful evil') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Venerar os mais forte e humilhar os mais fracos.';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = 'Tomar para si partes cibernéticas que ele acha bonito de outras pessoas ';
-        } else {
-          this.displayMotiv = 'Se autoproclamar dono da rua e cobrar toda vez que estacionam nela';
-        }
-      } else if (this.alinh === 'Neutral evil') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Conseguir livros de magias, independente dos meios que tenha que usar';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = 'Usar informações roubadas de sistemas para benefícios próprio';
-        } else {
-          this.displayMotiv = 'Bater carteira no carnaval';
-        }
-      } else if (this.alinh === 'Chaotic evil') {
-        if (this.context === 'Medieval') {
-          this.displayMotiv = 'Ver pessoas de poder da cidades voltarem umas contras as outras, até a cidade se auto destruir';
-        } else if (this.context === 'Cyberpunk') {
-          this.displayMotiv = '';
-        } else {
-          this.displayMotiv = 'Andar com outra pessoa numa moto pra assaltar. Andar na rua com a moto sem silenciador no escape';
-        }
-      }
+      const motivs = {
+        LG: {
+          medieval: ['Passar um bom tempo com as pessoas que gosta e conseguir descansar o dia todo.', 'Combater os monstros e as pessoas ruins do mundo.'],
+          cyberpunk: ['Ajudar pessoas que não tem condições de ter uma vida adequada'],
+          recifense: ['Escutar sua familia e amigos fofoqueiros e realmente não espalhar pra ninguém.', 'Ceder o lugar no ônibus para os mais velhos.'],
+        },
+        NG: {
+          medieval: [''],
+          cyberpunk: [''],
+          recifense: ['Sair na noite pra acompanhar os amigos e comer no Gildo lanches de madrugada.', 'Só quer ficar de boa e tirar ferias pra ir pra praia.'],
+        },
+        CG: {
+          medieval: ['Sempre atrás de dinheiro (normalmente jogando em tavernas) para dar a caridade.', 'Faz venda de artefatos / comida / afins, cobrando muito caro de senhores de terra e pouco de camponeses'],
+          cyberpunk: ['Fazer de tudo para seus amigos, até mesmo vender uma perna (de outra pessoa).'],
+          recifense: ['Fazer culto no metro / ônibus, no horário de volta, quando todo mundo ta tentando dormir.', 'Gritar que tem tubarão na agua toda vez que vê alguém indo pro fundo na praia de BV'],
+        },
+        LN: {
+          medieval: ['Tentar fazer todos pagarem o que fizeram na mesma moeda (olho por olho, dente por dente)'],
+          cyberpunk: [''],
+          recifense: ['Dirigir dando a seta.'],
+        },
+        TN: {
+          medieval: ['Sentir a adrenalina de caçar presas, seja animais, monstros ou outra coisa.'],
+          cyberpunk: ['Ficar de boa no mundo virtual e esquecer que tem um corpo fisico.'],
+          recifense: ['Terminar sua graduação / mestrado / doutorado dps de incontáveis anos de curso, depois de ter desistido diversas vezes.'],
+        },
+
+        CN: {
+          medieval: ['Fazer confusão e sempre culpar outra pessoa.'],
+          cyberpunk: [''],
+          recifense: ['Gritar “falou da mãe, vai deixar?”, toda vez que vê uma discussão na rua.'],
+        },
+
+        LE: {
+          medieval: ['Venerar os mais forte e humilhar os mais fracos.'],
+          cyberpunk: ['Tomar para si partes cibernéticas que ele acha bonito de outras pessoas.'],
+          recifense: ['Se autoproclamar dono da rua e cobrar toda vez que estacionam nela.'],
+        },
+        NE: {
+          medieval: ['Conseguir livros de magias, independente dos meios que tenha que usar'],
+          cyberpunk: ['Usar informações roubadas de sistemas para benefícios próprio'],
+          recifense: ['Bater carteira no carnaval'],
+        },
+        CE: {
+          medieval: ['Ver pessoas de poder da cidades voltarem umas contras as outras, até a cidade se auto destruir.'],
+          cyberpunk: [''],
+          recifense: ['Andar com outra pessoa numa moto pra assaltar.', 'Andar na rua com a moto sem silenciador no escape.'],
+        },
+      };
+
+      const context = this.contexts[this.context];
+      const align = this.aligns[this.alinh];
+
+      const possibleOcups = ocup[context];
+      this.displayOcup = possibleOcups[Math.floor(Math.random() * possibleOcups.length)];
+
+      const possibleMotivs = motivs[align][context];
+      this.displayMotiv = possibleMotivs[Math.floor(Math.random() * possibleMotivs.length)];
     },
   },
 };
