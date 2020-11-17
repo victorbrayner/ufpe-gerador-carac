@@ -18,7 +18,7 @@
             <q-btn label="Limpar" type="reset" color="primary" flat class="q-ml-sm" />
           </div>
         </q-form>
-        <h6>{{ displayOcup }} - {{ displayMotiv }} - {{ displayInters }}</h6>
+        <h6> {{displayText}} </h6>
       </div>
     </div>
   </q-page>
@@ -62,6 +62,7 @@ export default {
       displayOcup: null,
       displayMotiv: null,
       displayInters: null,
+      displayText: null,
       arquet: null,
       context: null,
       alinh: null,
@@ -81,6 +82,10 @@ export default {
       this.displayOcup = null;
       this.displayMotiv = null;
       this.displayInters = null;
+      this.displayText = null;
+    },
+    generateText(ocup, motiv, inter) {
+      return `Um ${ocup} e tenta ${inter.toLowerCase()} e ${motiv.toLowerCase()} durante suas andanças da vida`;
     },
     onSubmit() {
       const ocup = {
@@ -99,7 +104,7 @@ export default {
         LG: {
           medieval: ['Passar um bom tempo com as pessoas que gosta e conseguir descansar o dia todo', 'Combater os monstros e as pessoas ruins do mundo'],
           cyberpunk: ['Ajudar pessoas que não tem condições de ter uma vida adequada'],
-          recifense: ['Escutar sua familia e amigos fofoqueiros e realmente não espalhar pra ninguém', 'Ceder o lugar no ônibus para os mais velhos'],
+          recifense: ['Escutar sua familia e amigos fofoqueiros e sem espalhar pra ninguém', 'Ceder o lugar no ônibus para os mais velhos'],
         },
         NG: {
           medieval: [''],
@@ -109,29 +114,29 @@ export default {
         CG: {
           medieval: ['Sempre atrás de dinheiro (normalmente jogando em tavernas) para dar a caridade', 'Faz venda de artefatos / comida / afins, cobrando muito caro de senhores de terra e pouco de camponeses'],
           cyberpunk: ['Fazer de tudo para seus amigos, até mesmo vender uma perna (de outra pessoa)'],
-          recifense: ['Fazer culto no metro / ônibus, no horário de volta, quando todo mundo ta tentando dormir.', 'Gritar que tem tubarão na agua toda vez que vê alguém indo pro fundo na praia de BV'],
+          recifense: ['Fazer culto no metro / ônibus, no horário de volta, quando todo mundo ta tentando dormir', 'Gritar que tem tubarão na agua toda vez que vê alguém indo pro fundo na praia de Boa Viagem'],
         },
         LN: {
           medieval: ['Tentar fazer todos pagarem o que fizeram na mesma moeda (olho por olho, dente por dente)'],
           cyberpunk: [''],
-          recifense: ['Dirigir dando a seta.'],
+          recifense: ['Dirigir dando a seta'],
         },
         TN: {
-          medieval: ['Sentir a adrenalina de caçar presas, seja animais, monstros ou outra coisa.'],
-          cyberpunk: ['Ficar de boa no mundo virtual e esquecer que tem um corpo fisico.'],
-          recifense: ['Terminar sua graduação / mestrado / doutorado dps de incontáveis anos de curso, depois de ter desistido diversas vezes.'],
+          medieval: ['Sentir a adrenalina de caçar presas, seja animais, monstros ou outra coisa'],
+          cyberpunk: ['Ficar de boa no mundo virtual e esquecer que tem um corpo fisico'],
+          recifense: ['Terminar sua graduação / mestrado / doutorado dps de incontáveis anos de curso, depois de ter desistido diversas vezes'],
         },
 
         CN: {
-          medieval: ['Fazer confusão e sempre culpar outra pessoa.'],
+          medieval: ['Fazer confusão e sempre culpar outra pessoa'],
           cyberpunk: [''],
-          recifense: ['Gritar “falou da mãe, vai deixar?”, toda vez que vê uma discussão na rua.'],
+          recifense: ['Gritar “falou da mãe, vai deixar?”, toda vez que vê uma discussão na rua'],
         },
 
         LE: {
           medieval: ['Venerar os mais forte e humilhar os mais fracos'],
           cyberpunk: ['Tomar para si partes cibernéticas que ele acha bonito de outras pessoas'],
-          recifense: ['Se autoproclamar dono da rua e cobrar toda vez que estacionam nela'],
+          recifense: ['Se autoproclamar dono da rua e reclamar toda vez que estacionam nela'],
         },
         NE: {
           medieval: ['Conseguir livros de magias, independente dos meios que tenha que usar'],
@@ -141,7 +146,7 @@ export default {
         CE: {
           medieval: ['Ver pessoas de poder da cidades voltarem umas contras as outras, até a cidade se auto destruir'],
           cyberpunk: [''],
-          recifense: ['Andar com outra pessoa numa moto pra assaltar.', 'Andar na rua com a moto sem silenciador no escape'],
+          recifense: ['Andar com outra pessoa numa moto pra assaltar', 'Andar na rua com a moto sem silenciador no escape'],
         },
       };
 
@@ -213,13 +218,15 @@ export default {
       const arq = this.arqs[this.arquet];
 
       const possibleOcups = ocup[context];
-      this.displayOcup = possibleOcups[Math.floor(Math.random() * possibleOcups.length)];
+      const displayOcup = possibleOcups[Math.floor(Math.random() * possibleOcups.length)];
 
       const possibleMotivs = motivs[align][context];
-      this.displayMotiv = possibleMotivs[Math.floor(Math.random() * possibleMotivs.length)];
+      const displayMotiv = possibleMotivs[Math.floor(Math.random() * possibleMotivs.length)];
 
       const possibleInters = inters[arq][context];
-      this.displayInters = possibleInters[Math.floor(Math.random() * possibleInters.length)];
+      const displayInters = possibleInters[Math.floor(Math.random() * possibleInters.length)];
+
+      this.displayText = this.generateText(displayOcup, displayMotiv, displayInters);
     },
   },
 };
