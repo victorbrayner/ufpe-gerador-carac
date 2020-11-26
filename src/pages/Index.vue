@@ -61,6 +61,9 @@ export default {
     return {
       displayOcup: null,
       displayMotiv: null,
+      possibleInters: null,
+      possibleOcups: null,
+      possibleMotivs: null,
       displayInters: null,
       displayText: null,
       arquet: null,
@@ -79,15 +82,38 @@ export default {
       this.arquet = null;
       this.context = null;
       this.alinh = null;
-      this.displayOcup = null;
-      this.displayMotiv = null;
+      this.displayOcups = null;
+      this.displayMotivs = null;
       this.displayInters = null;
       this.displayText = null;
     },
     generateText(ocup, motiv, inter) {
       return `Um ${ocup} e tenta ${inter.toLowerCase()} e ${motiv.toLowerCase()} durante suas andanças da vida`;
     },
-    onSubmit() {
+    getNPC(context, align, arq) {
+      return this.$database()
+        .ref('occupations/' + context)
+        .once('value')
+        .then((snapshot) => {
+          this.possibleOcups = snapshot.val();
+
+          return this.$database()
+          .ref('interests/' + arq + '/' + context)
+          .once('value')
+          .then((snapshot) => {
+            this.possibleInters = snapshot.val();
+
+            return this.$database()
+            .ref('motivations/' + align + '/' + context)
+            .once('value')
+            .then((snapshot) => {
+              this.possibleMotivs = snapshot.val();
+            });
+          });
+        });
+ 
+    },
+    async onSubmit() {
       const ocup = {
         medieval: [
           'Ator', 'Ferreiro', 'Taverneiro', 'Carpinteiro', 'Construtor', 'Sapateiro', 'Cozinheiro', 'Carteiro', 'Mestre da Guilda', 'Mago', 'Escultora', 'Açougueira', 'Lorde', 'Professora', 'Advogada', 'Pirata', 'Necromante', 'Açougueira', 'Fazendeira', 'Cavaleiro', 'Bruxo',
@@ -216,18 +242,28 @@ export default {
       const context = this.contexts[this.context];
       const align = this.aligns[this.alinh];
       const arq = this.arqs[this.arquet];
+      
+      this.getNPC(context, align, arq).then((response) => {
+        
+        const displayOcup = this.possibleOcups[Math.floor(Math.random() * this.possibleOcups.length)];
 
-      const possibleOcups = ocup[context];
-      const displayOcup = possibleOcups[Math.floor(Math.random() * possibleOcups.length)];
+      
+        const displayMotiv = this.possibleMotivs[Math.floor(Math.random() * this.possibleMotivs.length)];
 
-      const possibleMotivs = motivs[align][context];
-      const displayMotiv = possibleMotivs[Math.floor(Math.random() * possibleMotivs.length)];
+      
+      const displayInters =
+        this.possibleInters[Math.floor(Math.random() * this.possibleInters.length)];
+      
+      this.displayText = this.generateText(
+        displayOcup,
+        displayMotiv,
+        displayInters
+      );
 
-      const possibleInters = inters[arq][context];
-      const displayInters = possibleInters[Math.floor(Math.random() * possibleInters.length)];
+      });
 
-      this.displayText = this.generateText(displayOcup, displayMotiv, displayInters);
-    },
-  },
+      
+    }
+  }
 };
 </script>
